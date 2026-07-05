@@ -486,9 +486,9 @@ footer .fnote{font-size:.78rem;margin-top:1.4rem;color:rgba(255,255,255,.4)}
     </div>
 
     <!-- NETLIFY FORM — submissions appear in Netlify > Forms and email Steve. -->
-    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/?submitted=true">
-      <input type="hidden" name="form-name" value="contact">
-      <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
+    <form name="inquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/?submitted=true">
+      <input type="hidden" name="form-name" value="inquiry">
+      <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
       <div class="field-row">
         <div><label class="flabel">Your name</label><input type="text" name="name" required></div>
         <div><label class="flabel">Email</label><input type="email" name="email" required></div>
@@ -551,7 +551,7 @@ function updateSummary(){
 }
 /* Show thank-you after the form is submitted */
 if(new URLSearchParams(location.search).get('submitted')){
-  const f=document.querySelector('form[name="contact"]');
+  const f=document.querySelector('form[name="inquiry"]');
   const s=document.getElementById('formSuccess');
   if(f)f.style.display='none';
   if(s){s.style.display='block';s.scrollIntoView({behavior:'smooth',block:'center'});}
