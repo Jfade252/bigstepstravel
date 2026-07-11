@@ -326,7 +326,7 @@ footer .fnote{font-size:.78rem;margin-top:1.4rem;color:rgba(255,255,255,.4)}
       <div class="bstep">
         <label><span class="num-tag">01 — </span>Where Do You Dream Of?</label>
         <div class="opts" data-group="region">
-          <span class="opt">USA Road Trips</span><span class="opt">USA Regional Exploration</span><span class="opt">USA National Parks</span><span class="opt">Alaska &amp; Hawaii</span><span class="opt">Canada</span><span class="opt">Europe</span><span class="opt">Asia</span><span class="opt">Central America</span><span class="opt">Australia &amp; New Zealand</span>
+          <span class="opt">USA - Road Trips</span><span class="opt">USA - Regional Exploration</span><span class="opt">USA - National Parks</span><span class="opt">Alaska &amp; Hawaii</span><span class="opt">Canada</span><span class="opt">Europe</span><span class="opt">Asia</span><span class="opt">Central America</span><span class="opt">Australia &amp; New Zealand</span>
         </div>
       </div>
       <div class="bstep">
@@ -344,13 +344,13 @@ footer .fnote{font-size:.78rem;margin-top:1.4rem;color:rgba(255,255,255,.4)}
       <div class="bstep">
         <label><span class="num-tag">04 — </span>Your Ideal Pace?</label>
         <div class="opts" data-group="pace">
-          <span class="opt">Packed with discovery</span><span class="opt">A balanced mix</span><span class="opt">Slow &amp; easy</span>
+          <span class="opt">On The Go</span><span class="opt">A Balanced Mix</span><span class="opt">Slow &amp; Easy</span>
         </div>
       </div>
     </div>
     <div class="builder-summary">
       <p id="summary-text">Make your selections above and we'll sketch the beginning of your trip…</p>
-      <a href="#inquire" class="btn btn-gold" id="builderCta" onclick="sendToForm()">Send This To Us →</a>
+      <a href="#inquire" class="btn btn-gold" id="builderCta" onclick="sendToForm()">Click here to begin building your journey →</a>
     </div>
   </div>
 </section>
@@ -525,23 +525,31 @@ document.getElementById('menuBtn').addEventListener('click',()=>document.getElem
 document.querySelectorAll('#navlinks a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navlinks').classList.remove('open')));
 
 /* Trip builder */
-const picks={region:'',style:'',party:'',pace:''};
+const picks={region:'',style:[],party:'',pace:''};
 document.querySelectorAll('.opts').forEach(group=>{
   const key=group.dataset.group;
+  const multi=key==='style';
   group.querySelectorAll('.opt').forEach(opt=>{
     opt.addEventListener('click',()=>{
-      group.querySelectorAll('.opt').forEach(o=>o.classList.remove('active'));
-      opt.classList.add('active');
-      picks[key]=opt.textContent.trim();
+      if(multi){
+        opt.classList.toggle('active');
+        picks[key]=Array.from(group.querySelectorAll('.opt.active')).map(o=>o.textContent.trim());
+      } else {
+        group.querySelectorAll('.opt').forEach(o=>o.classList.remove('active'));
+        opt.classList.add('active');
+        picks[key]=opt.textContent.trim();
+      }
       updateSummary();
     });
   });
 });
 function updateSummary(){
   const t=document.getElementById('summary-text');
-  if(!picks.region&&!picks.style&&!picks.party&&!picks.pace){return;}
+  const styleArr=Array.isArray(picks.style)?picks.style:[picks.style].filter(Boolean);
+  if(!picks.region&&!styleArr.length&&!picks.party&&!picks.pace){return;}
   const region=picks.region||'a destination of your choosing';
-  const style=picks.style?picks.style.toLowerCase():'a feeling we will discover together';
+  const styleVal=Array.isArray(picks.style)?picks.style:picks.style?[picks.style]:[];
+  const style=styleVal.length?styleVal.map(s=>s.toLowerCase()).join(', '):'a feeling we will discover together';
   const party=picks.party?picks.party.toLowerCase():'you';
   const pace=picks.pace?picks.pace.toLowerCase():'a pace that suits you';
   t.textContent=`A journey through ${region} for ${party} — built around ${style}, at ${pace}. Steve will take it from here.`;
@@ -557,7 +565,8 @@ if(new URLSearchParams(location.search).get('submitted')){
 function sendToForm(){
   const msg=document.getElementById('formMessage');
   if(picks.region||picks.style||picks.party||picks.pace){
-    msg.value=`I used the trip designer:\n• Destination: ${picks.region||'open'}\n• Feeling: ${picks.style||'open'}\n• Travelling: ${picks.party||'open'}\n• Pace: ${picks.pace||'open'}\n\nA bit more about what I'm hoping for: `;
+    const styleList=Array.isArray(picks.style)?picks.style.join(', '):picks.style;
+    msg.value=`I used the trip designer:\n• Destination: ${picks.region||'open'}\n• Feeling: ${styleList||'open'}\n• Travelling: ${picks.party||'open'}\n• Pace: ${picks.pace||'open'}\n\nA bit more about what I'm hoping for: `;
   }
 }
 </script>
