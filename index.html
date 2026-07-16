@@ -108,6 +108,7 @@ img{max-width:100%;display:block}
 .btn{display:inline-block;padding:15px 34px;font-size:.8rem;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;border:none;transition:.25s;font-family:var(--font-body);font-weight:600}
 .btn-gold{background:var(--gold);color:var(--white)}
 .btn-gold:hover{background:var(--gold-dark)}
+.btn-gold.disabled{background:#b0b0b0;color:#e8e8e8;cursor:not-allowed;pointer-events:none;opacity:.6}
 .btn-outline{background:transparent;border:1px solid var(--white);color:var(--white)}
 .btn-outline:hover{background:var(--white);color:var(--navy)}
 .btn-dark{background:var(--navy);color:var(--white)}
@@ -344,7 +345,7 @@ footer .fnote{font-size:.78rem;margin-top:1.4rem;color:rgba(255,255,255,.4)}
     </div>
     <div class="builder-summary">
       <p id="summary-text">Make your selections above and we'll sketch the beginning of your trip…</p>
-      <a href="#inquire" class="btn btn-gold" id="builderCta" onclick="sendToForm()">Click here to begin building your journey →</a>
+      <a href="#inquire" class="btn btn-gold" id="builderCta" onclick="if(this.classList.contains('disabled'))return false;sendToForm()">Click here to begin building your journey →</a>
     </div>
   </div>
 </section>
@@ -532,6 +533,19 @@ document.querySelectorAll('#navlinks a').forEach(a=>a.addEventListener('click',(
 
 /* Trip builder */
 const picks={region:'',style:[],party:'',pace:''};
+function updateCtaState(){
+  const cta=document.getElementById('builderCta');
+  const styleArr=Array.isArray(picks.style)?picks.style:[picks.style].filter(Boolean);
+  const allSelected=picks.region&&styleArr.length&&picks.party&&picks.pace;
+  if(allSelected){
+    cta.classList.remove('disabled');
+    cta.removeAttribute('aria-disabled');
+  } else {
+    cta.classList.add('disabled');
+    cta.setAttribute('aria-disabled','true');
+  }
+}
+updateCtaState();
 document.querySelectorAll('.opts').forEach(group=>{
   const key=group.dataset.group;
   const multi=key==='style';
@@ -546,6 +560,7 @@ document.querySelectorAll('.opts').forEach(group=>{
         picks[key]=opt.textContent.trim();
       }
       updateSummary();
+      updateCtaState();
     });
   });
 });
