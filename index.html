@@ -578,7 +578,7 @@ function updateSummary(){
   const style=styleVal.length?styleVal.map(s=>s.toLowerCase()).join(', '):'a feeling we will discover together';
   const party=picks.party?picks.party.toLowerCase():'you';
   const pace=picks.pace?picks.pace.toLowerCase():'a pace that suits you';
-  t.textContent=`A journey through ${region} for ${party} — built around ${style}, at ${pace}. Steve will take it from here.`;
+  t.textContent=`A journey through ${region} for ${party} — built around ${style}, at ${pace}.`;
 }
 /* Show thank-you after the form is submitted */
 if(new URLSearchParams(location.search).get('submitted')){
