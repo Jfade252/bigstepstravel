@@ -555,9 +555,14 @@ document.querySelectorAll('.opts').forEach(group=>{
         opt.classList.toggle('active');
         picks[key]=Array.from(group.querySelectorAll('.opt.active')).map(o=>o.textContent.trim());
       } else {
+        const wasActive=opt.classList.contains('active');
         group.querySelectorAll('.opt').forEach(o=>o.classList.remove('active'));
-        opt.classList.add('active');
-        picks[key]=opt.textContent.trim();
+        if(!wasActive){
+          opt.classList.add('active');
+          picks[key]=opt.textContent.trim();
+        } else {
+          picks[key]='';
+        }
       }
       updateSummary();
       updateCtaState();
