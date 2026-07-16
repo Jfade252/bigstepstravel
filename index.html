@@ -592,7 +592,7 @@ function sendToForm(){
   const msg=document.getElementById('formMessage');
   if(picks.region||picks.style||picks.party||picks.pace){
     const styleList=Array.isArray(picks.style)?picks.style.join(', '):picks.style;
-    msg.value=`I used the trip designer:\n• Destination: ${picks.region||'open'}\n• Feeling: ${styleList||'open'}\n• Travelling: ${picks.party||'open'}\n• Pace: ${picks.pace||'open'}\n\nA bit more about what I'm hoping for: `;
+    msg.value=`I used the trip designer:\n• Destination: ${picks.region||'open'}\n• Feeling: ${styleList||'open'}\n• Travelling: ${picks.party||'open'}\n• Pace: ${picks.pace||'open'}\n\nOther details, specifics or questions you have add here: `;
   }
 }
 </script>
