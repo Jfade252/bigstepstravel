@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "serve . -l 5173",
-    "build": "echo 'Static site, no build step needed'"
+    "build": "mkdir -p dist && cp index.html dist/ && cp -r images dist/"
   },
   "dependencies": {
     "serve": "^14.2.4"
